@@ -12,9 +12,9 @@ import androidx.annotation.RequiresApi
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
-class StudiosListAdapter(private val context: Activity, private val arrayList: ArrayList<StudioListJson>): ArrayAdapter<StudioListJson>(context, R.layout.list_item, arrayList) {
+class StudiosListAdapter(private val context: Activity, private val arrayList: ArrayList<StudioListDate>): ArrayAdapter<StudioListDate>(context, R.layout.list_item, arrayList) {
 
-    @SuppressLint("ViewHolder", "InflateParams", "SetTextI18n",)
+    @SuppressLint("ViewHolder", "InflateParams", "SetTextI18n", "MissingInflatedId",)
     @RequiresApi(Build.VERSION_CODES.O)
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
 
@@ -22,22 +22,10 @@ class StudiosListAdapter(private val context: Activity, private val arrayList: A
         val view = inFlater.inflate(R.layout.list_item, null)
 
         val itemName = view.findViewById<TextView>(R.id.nameItemTV)
-        val timeStart = view.findViewById<TextView>(R.id.timeStartTV)
-        val timeEnd = view.findViewById<TextView>(R.id.timeEndTV)
-        val taskItem = view.findViewById<TextView>(R.id.taskItemTV)
-        val dateFormat = DateTimeFormatter.ofPattern("dd.MM HH:mm")
+        val text = view.findViewById<TextView>(R.id.textTV)
 
-
-        itemName.text = arrayList[position].studio_name
-        timeStart.text = "С "+
-            arrayList[position].dateStart!!.toInstant()
-                .atOffset(ZoneOffset.UTC)
-                .toLocalDateTime().format(dateFormat)
-        timeEnd.text = "До "+
-            arrayList[position].dateEnd!!.toInstant()
-                .atOffset(ZoneOffset.UTC)
-                .toLocalDateTime().format(dateFormat)
-        taskItem.text = arrayList[position].task_name
+        itemName.text = arrayList[position].name
+        text.text = arrayList[position].arrayList.toString()
 
 
         return view

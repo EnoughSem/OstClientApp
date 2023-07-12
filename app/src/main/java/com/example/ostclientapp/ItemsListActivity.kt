@@ -69,9 +69,10 @@ class ItemsListActivity : AppCompatActivity() {
                 val dateString = client.get<String>(url)
                 val typeToken = object : TypeToken<ArrayList<ItemListJson>>() {}.type
                 val itemsList = Gson().fromJson<ArrayList<ItemListJson>>(dateString, typeToken)
+                val convert = Convert().convertForItem(itemsList)
                 CoroutineScope(Dispatchers.Main).launch {
                     bilding.listview.isClickable = true
-                    bilding.listview.adapter = ItemsListAdapter(context, itemsList)
+                    bilding.listview.adapter = ItemsListAdapter(context,convert)
                 }
             }
         }

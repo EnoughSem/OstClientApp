@@ -68,9 +68,10 @@ class StudiosListActivity : AppCompatActivity() {
                 val dateString = client.get<String>(url)
                 val typeToken = object : TypeToken<ArrayList<StudioListJson>>() {}.type
                 val itemsList = Gson().fromJson<ArrayList<StudioListJson>>(dateString, typeToken)
+                val convert = Convert().convertForStudio(itemsList)
                 CoroutineScope(Dispatchers.Main).launch {
                     bilding.listview.isClickable = true
-                    bilding.listview.adapter = StudiosListAdapter(context, itemsList)
+                    bilding.listview.adapter = StudiosListAdapter(context, convert)
                 }
             }
         }

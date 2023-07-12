@@ -2,18 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="center">
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp"
             android:layout_centerHorizontal="true"
+            android:layout_marginVertical="10dp"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -23,28 +23,41 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/nameItemTV"
+                    android:id="@+id/timeStartTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="nameItem"
+                    android:text="timeStart"
                     android:textAlignment="center"
                     android:textColor="@color/black"
-                    android:textSize="26sp"
-                    android:textStyle="bold" />
+                    android:textSize="18sp"
+                    android:textStyle="normal" />
 
                 <TextView
+                    android:id="@+id/timeEndTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textTV"
-                    android:textColor="@color/black"
+                    android:text="timeEnd"
                     android:textAlignment="center"
+                    android:textColor="@color/black"
                     android:textSize="18sp"
-                    android:textStyle="normal"
-                    android:text="timeStart"/>
+                    android:textStyle="normal"/>
 
+                <TextView
+                    android:id="@+id/taskItemTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="taskItem"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="22sp"
+                    android:textStyle="italic"
+                    />
 
             </LinearLayout>
-
         </LinearLayout>
+
+
+
+
     </RelativeLayout>
 </LinearLayout>

@@ -12,7 +12,7 @@ import androidx.annotation.RequiresApi
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
-class ItemsListAdapter(private val context: Activity, private val arrayList: ArrayList<ItemListJson>): ArrayAdapter<ItemListJson>(context, R.layout.list_item, arrayList) {
+class ItemsListAdapter(private val context: Activity, private val arrayList: ArrayList<ItemListDate>): ArrayAdapter<ItemListDate>(context, R.layout.list_item, arrayList) {
 
     @SuppressLint("ViewHolder", "InflateParams", "SetTextI18n",)
     @RequiresApi(Build.VERSION_CODES.O)
@@ -22,22 +22,10 @@ class ItemsListAdapter(private val context: Activity, private val arrayList: Arr
         val view = inFlater.inflate(R.layout.list_item, null)
 
         val itemName = view.findViewById<TextView>(R.id.nameItemTV)
-        val timeStart = view.findViewById<TextView>(R.id.timeStartTV)
-        val timeEnd = view.findViewById<TextView>(R.id.timeEndTV)
-        val taskItem = view.findViewById<TextView>(R.id.taskItemTV)
-        val dateFormat = DateTimeFormatter.ofPattern("dd.MM HH:mm")
+        val text = view.findViewById<TextView>(R.id.textTV)
 
-
-        itemName.text = arrayList[position].equipment_name
-        timeStart.text = "С "+
-            arrayList[position].dateStart!!.toInstant()
-                .atOffset(ZoneOffset.UTC)
-                .toLocalDateTime().format(dateFormat)
-        timeEnd.text = "До "+
-            arrayList[position].dateEnd!!.toInstant()
-                .atOffset(ZoneOffset.UTC)
-                .toLocalDateTime().format(dateFormat)
-        taskItem.text = arrayList[position].task_name
+        itemName.text = arrayList[position].name
+        text.text = arrayList[position].arrayList.toString()
 
 
         return view
