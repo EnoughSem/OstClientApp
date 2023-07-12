@@ -25,7 +25,7 @@ class StudiosListAdapter(private val context: Activity, private val arrayList: A
         val timeStart = view.findViewById<TextView>(R.id.timeStartTV)
         val timeEnd = view.findViewById<TextView>(R.id.timeEndTV)
         val taskItem = view.findViewById<TextView>(R.id.taskItemTV)
-        val dateFormat = DateTimeFormatter.ofPattern("HH:mm")
+        val dateFormat = DateTimeFormatter.ofPattern("dd.MM HH:mm")
 
 
         itemName.text = arrayList[position].studio_name

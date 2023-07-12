@@ -1,16 +1,15 @@
 package com.example.ostclientapp
 
 import android.app.Activity
-import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
-import android.widget.DatePicker
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import com.example.ostclientapp.databinding.ActivityItemsListBinding
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.ktor.client.HttpClient
@@ -18,22 +17,22 @@ import io.ktor.client.request.get
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 
-class ItemsListActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener {
+class ItemsListActivity : AppCompatActivity() {
 
     private var day = 0
     private var month = 0
     private var year = 0
 
-    private var savedDay = 0
-    private var savedMonth = 0
-    private var savedYear = 0
-
     private lateinit var datePickerButton: Button
     private lateinit var backButton: Button
     private lateinit var bilding: ActivityItemsListBinding
+    private lateinit var textDate: TextView
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,24 +42,19 @@ class ItemsListActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListene
 
         getDayCalendar()
 
-        val textDate = findViewById<TextView>(R.id.date)
+        textDate = findViewById(R.id.date)
         textDate.text = "$day-"+(month+1)+"-$year"
 
         datePickerButton = findViewById(R.id.datePickerButton)
         datePickerButton.setOnClickListener {
-            pickDate()
-        }
-
-        datePickerButton = findViewById(R.id.datePickerButton)
-        datePickerButton.setOnClickListener {
-            pickDate()
+            showDateRangePicker()
         }
         backButton = findViewById(R.id.backButton)
         backButton.setOnClickListener {
             openStartActivity()
         }
 
-        startActivity(this, "$day-"+ (month+1) +"-$year")
+        addList(this, "$day-"+ (month+1) +"-$year","$day-"+ (month+1) +"-$year")
     }
 
     private fun openStartActivity() {
@@ -68,9 +62,9 @@ class ItemsListActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListene
         startActivity(intent)
     }
 
-    private fun startActivity(context: Activity, date: String) {
+    private fun addList(context: Activity, dateStart: String, dateEnd: String) {
         CoroutineScope(Dispatchers.Default).launch {
-            val url = "https://www.mamont-server.ru:8888/api/check_equipment/$date"
+            val url = "https://www.mamont-server.ru:8888/api/check_equipment/$dateStart/$dateEnd"
             HttpClient().use { client ->
                 val dateString = client.get<String>(url)
                 val typeToken = object : TypeToken<ArrayList<ItemListJson>>() {}.type
@@ -90,19 +84,33 @@ class ItemsListActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListene
         year = cal.get(Calendar.YEAR)
     }
 
-    private fun pickDate() {
-        getDayCalendar()
-        DatePickerDialog(this, this, year, month, day).show()
+    private fun showDateRangePicker() {
+
+        val dateRangePicker = MaterialDatePicker.Builder
+            .dateRangePicker()
+            .setTitleText("Выберите дату")
+            .build()
+
+        dateRangePicker.show(supportFragmentManager, "date_range_pucker")
+
+        dateRangePicker.addOnPositiveButtonClickListener{ datePicker ->
+
+            val startDate = convertLongToDate(datePicker.first)
+            val secondDate = convertLongToDate(datePicker.second)
+
+            textDate = findViewById(R.id.date)
+            textDate.text = "$startDate - $secondDate"
+
+            addList(this, startDate, secondDate)
+        }
     }
 
-    override fun onDateSet(p0: DatePicker?, year: Int, month: Int, day: Int) {
-        savedDay = day
-        savedMonth = month+1
-        savedYear = year
+    private fun convertLongToDate(time: Long): String{
 
-        val textDate = findViewById<TextView>(R.id.date)
-        textDate.text = "$savedDay-$savedMonth-$savedYear"
+        val date = Date(time)
+        val format = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+        return format.format(date)
 
-        startActivity(this,"$savedDay-$savedMonth-$savedYear")
+
     }
 }
