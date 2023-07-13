@@ -67,12 +67,13 @@ class ItemsListActivity : AppCompatActivity() {
             val url = "https://www.mamont-server.ru:8888/api/check_equipment/$dateStart/$dateEnd"
             HttpClient().use { client ->
                 val dateString = client.get<String>(url)
-                val typeToken = object : TypeToken<ArrayList<ItemListJson>>() {}.type
-                val itemsList = Gson().fromJson<ArrayList<ItemListJson>>(dateString, typeToken)
+                val typeToken = object : TypeToken<ArrayList<EquipmentJson>>() {}.type
+                val itemsList = Gson().fromJson<ArrayList<EquipmentJson>>(dateString, typeToken)
                 val convert = Convert().convertForItem(itemsList)
+
                 CoroutineScope(Dispatchers.Main).launch {
                     bilding.listview.isClickable = true
-                    bilding.listview.adapter = ItemsListAdapter(context,convert)
+                    bilding.listview.adapter = EquipmentStackAdapter(context, R.layout.equipment_item, convert)
                 }
             }
         }
